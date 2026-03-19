@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Step</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #111; background: #fff; line-height: 1.6; }
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 3rem; border-bottom: 1px solid #f0f0f0; background: #fff; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-size: 14px; font-weight: 600; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { font-size: 13px; color: #888; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+  .nav-links a:hover { color: #111; }
+  .hero { padding: 8rem 3rem 6rem; max-width: 800px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.12em; color: #aaa; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: 3.4rem; font-weight: 500; line-height: 1.12; letter-spacing: -0.04em; margin-bottom: 1.5rem; color: #111; }
+  .hero p { font-size: 1.1rem; color: #666; max-width: 500px; line-height: 1.75; margin-bottom: 2.5rem; }
+  .btn-dark { padding: 0.6rem 1.3rem; background: #111; color: #fff; border: none; border-radius: 999px; font-size: 13px; text-decoration: none; display: inline-block; cursor: pointer; }
+  .btn-dark:hover { background: #333; }
+  .btn-light { padding: 0.6rem 1.3rem; background: transparent; color: #111; border: 1px solid #ddd; border-radius: 999px; font-size: 13px; text-decoration: none; display: inline-block; cursor: pointer; }
+  .btn-light:hover { border-color: #aaa; }
+  .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .divider { height: 1px; background: #f0f0f0; margin: 0 3rem; }
+  .section { padding: 5.5rem 3rem; max-width: 800px; margin: 0 auto; }
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: #bbb; margin-bottom: 2.5rem; }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #f0f0f0; border-radius: 14px; overflow: hidden; margin-top: 2.5rem; }
+  .stat-item { padding: 2rem 1.5rem; border-right: 1px solid #f0f0f0; }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-size: 2.6rem; font-weight: 500; letter-spacing: -0.05em; line-height: 1; margin-bottom: 0.4rem; color: #111; }
+  .stat-desc { font-size: 12px; color: #888; }
+  .video-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
+  .video-block video { width: 100%; aspect-ratio: 16/9; border-radius: 10px; background: #f5f5f5; display: block; }
+  .video-block p { font-size: 12px; color: #aaa; margin-top: 0.6rem; }
+  .hardware-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; margin-top: 2rem; }
+  .hw-card { padding: 1.4rem; border: 1px solid #f0f0f0; border-radius: 12px; }
+  .hw-label { font-size: 11px; color: #bbb; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+  .hw-name { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; color: #111; }
+  .hw-desc { font-size: 12px; color: #888; line-height: 1.6; }
+  .step-list { margin-top: 2rem; }
+  .step-row { display: flex; gap: 2rem; padding: 1.6rem 0; border-bottom: 1px solid #f5f5f5; }
+  .step-row:first-child { border-top: 1px solid #f5f5f5; }
+  .step-n { font-size: 11px; color: #ccc; min-width: 24px; padding-top: 3px; }
+  .step-body h3 { font-size: 14px; font-weight: 500; margin-bottom: 0.3rem; color: #111; }
+  .step-body p { font-size: 13px; color: #777; max-width: 500px; line-height: 1.65; }
+  .findings { margin-top: 2rem; }
+  .finding-row { display: flex; justify-content: space-between; padding: 1.1rem 0; border-bottom: 1px solid #f5f5f5; gap: 2rem; align-items: baseline; }
+  .finding-row:first-child { border-top: 1px solid #f5f5f5; }
+  .finding-label { font-size: 13px; color: #777; max-width: 380px; }
+  .finding-value { font-size: 14px; font-weight: 500; white-space: nowrap; color: #111; }
+  .team-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2rem; }
+  .person { padding: 1.4rem; border: 1px solid #f0f0f0; border-radius: 12px; }
+  .person-initials { width: 34px; height: 34px; border-radius: 50%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; margin-bottom: 0.9rem; color: #666; }
+  .person h4 { font-size: 13px; font-weight: 500; margin-bottom: 0.2rem; color: #111; }
+  .person p { font-size: 12px; color: #aaa; }
+  .quote-block { border-left: 2px solid #f0f0f0; padding-left: 1.5rem; margin: 2.5rem 0; }
+  .quote-block p { font-size: 1rem; color: #555; line-height: 1.75; font-style: italic; }
+  footer { padding: 3rem; border-top: 1px solid #f0f0f0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  footer p { font-size: 12px; color: #ccc; }
+  footer a { font-size: 12px; color: #888; text-decoration: none; }
+  footer a:hover { color: #111; }
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1rem; }
+    .hero { padding: 4rem 1.5rem 3rem; }
+    .hero h1 { font-size: 2.2rem; }
+    .section { padding: 3.5rem 1.5rem; }
+    .video-row, .team-row, .hardware-row { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 1px solid #f0f0f0; }
+    .divider { margin: 0 1.5rem; }
+    footer { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">Safe Step</span>
+  <div class="nav-links">
+    <a onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How it works</a>
+    <a onclick="document.getElementById('results').scrollIntoView({behavior:'smooth'})">Results</a>
+    <a onclick="document.getElementById('team').scrollIntoView({behavior:'smooth'})">Team</a>
+    <a href="https://github.com/washingtona4/hazard-project.git" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Northwestern University &middot; 2026</div>
+  <h1>A cane that sees what you can't.</h1>
+  <p>A $50 smart cane that detects ground-level hazards: cords, cables, carpet edges, before you step on them. Real-time, on-device, no cloud required.</p>
+  <div class="hero-actions">
+    <a href="https://github.com/washingtona4/hazard-project.git" target="_blank" class="btn-dark">View on GitHub</a>
+    <a onclick="document.getElementById('videos').scrollIntoView({behavior:'smooth'})" class="btn-light">Watch demo</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">The problem</div>
+  <p style="font-size:1rem;color:#555;max-width:580px;line-height:1.85;">1 in 3 adults over 65 falls every year. More than half of those injuries happen at home,  caused not by dramatic accidents, but by a cord across a doorway, a curled carpet edge, a bag someone left on the floor. Existing assistive tech detects falls after they happen. We prevent them before contact.</p>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-num">30%</div><div class="stat-desc">of adults 65+ fall annually</div></div>
+    <div class="stat-item"><div class="stat-num">55%</div><div class="stat-desc">of fall injuries occur at home</div></div>
+    <div class="stat-item"><div class="stat-num">$50</div><div class="stat-desc">total hardware cost</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div id="videos" class="section">
+  <div style="display:flex; align-items:baseline; gap:1rem; margin-bottom:2.5rem;">
+    <div class="section-label" style="margin-bottom:0;">Demo</div>
+    <span style="font-size:12px; color:#bbb;">Turn your volume up to hear the audio alert.</span>
+  </div>
+  <div class="video-row">
+    <div class="video-block">
+      <video controls>
+        <source src="video1.mp4" type="video/mp4">
+      </video>
+      <p>System overview &amp; hardware walkthrough</p>
+    </div>
+    <div class="video-block">
+      <video controls>
+        <source src="video2.mp4" type="video/mp4">
+      </video>
+      <p>Live detection &amp; walking trial</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">The device</div>
+  <div class="hardware-row">
+    <div class="hw-card">
+      <div class="hw-label">Compute</div>
+      <div class="hw-name">Raspberry Pi Zero 2 W</div>
+      <div class="hw-desc">Compact, lightweight, built-in Wi-Fi. Coordinates sensor input and serves alerts locally. $15.</div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-label">Vision</div>
+      <div class="hw-name">Sony IMX500 AI Camera</div>
+      <div class="hw-desc">On-sensor neural inference via built-in NPU. YOLO11n runs entirely on the chip &mdash; no data leaves the device.</div>
+    </div>
+    <div class="hw-card">
+      <div class="hw-label">Motion sensing</div>
+      <div class="hw-name">LSM6DS3TR-C IMU</div>
+      <div class="hw-desc">3-axis accelerometer + gyroscope. Gates inference to stable, grounded cane positions only.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div id="how" class="section">
+  <div class="section-label">How it works</div>
+  <div class="step-list">
+    <div class="step-row">
+      <div class="step-n">01</div>
+      <div class="step-body">
+        <h3>IMU gates the system</h3>
+        <p>The accelerometer watches the Z-axis. When the cane tip contacts the ground and stabilizes, the system arms. When the cane lifts or swings, it stands down, no wasted inference on blurry, unreliable frames.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">02</div>
+      <div class="step-body">
+        <h3>Camera frames the path ahead</h3>
+        <p>The Sony IMX500 sits ~2 ft above ground, angled forward. It captures the 3&ndash;5 ft zone where ground-level hazards are most likely to appear before your next step.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">03</div>
+      <div class="step-body">
+        <h3>YOLO11n detects on-sensor in ~245ms</h3>
+        <p>No cloud. No network hop. The model runs on the IMX500's neural processor, returning bounding boxes and confidence scores. Up to 0.91 confidence on extension cords under bright light.</p>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">04</div>
+      <div class="step-body">
+        <h3>Audio alert before contact</h3>
+        <p>A local web server triggers an audio cue the moment a hazard clears the confidence threshold &mdash; giving 2&ndash;3 steps of advance warning. Supports push notifications to a caregiver's device.</p>
+      </div>
+    </div>
+  </div>
+  <div class="quote-block">
+    <p>&ldquo;The hazards are rarely dramatic. A cord left across a doorway, a carpet edge that has curled up over time, a bag someone forgot on the floor. These are the things that actually cause falls indoors, and assistive technology has largely overlooked them.&rdquo;</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div id="results" class="section">
+  <div class="section-label">Results</div>
+  <div class="findings">
+    <div class="finding-row"><div class="finding-label">Pre-contact alert rate across 15 walking trials</div><div class="finding-value">73%</div></div>
+    <div class="finding-row"><div class="finding-label">Peak detection confidence (extension cord, tile, bright light)</div><div class="finding-value">0.91</div></div>
+    <div class="finding-row"><div class="finding-label">Optimal detection range</div><div class="finding-value">3&ndash;5 ft</div></div>
+    <div class="finding-row"><div class="finding-label">Mean inference latency</div><div class="finding-value">~245 ms</div></div>
+    <div class="finding-row"><div class="finding-label">False positives on carpet</div><div class="finding-value">0 / 10</div></div>
+    <div class="finding-row"><div class="finding-label">Total hardware cost</div><div class="finding-value">&lt; $50</div></div>
+  </div>
+  <p style="font-size:12px;color:#ccc;margin-top:1.5rem;">Tested across 3 floor types &times; 2 lighting conditions &times; 2 hazard types, 5 reps each. Walking trial: 5 participants, 3 walks each.</p>
+</div>
+
+<div class="divider"></div>
+
+<div id="team" class="section">
+  <div class="section-label">Team</div>
+  <div class="team-row">
+    <div class="person"><div class="person-initials">AW</div><h4>Andre Washington</h4><p>Computer Science</p></div>
+    <div class="person"><div class="person-initials">SK</div><h4>Sunwoong Kim</h4><p>Computer Engineering</p></div>
+    <div class="person"><div class="person-initials">RJ</div><h4>Rama Janco</h4><p>Computer Science</p></div>
+  </div>
+  <p style="font-size:12px;color:#ccc;margin-top:1.25rem;">Northwestern University &middot; Evanston, IL &middot; 2026</p>
+</div>
+
+<footer>
+  <p>Safe Step &middot; Northwestern University &middot; 2026</p>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="https://github.com/washingtona4/hazard-project.git" target="_blank">GitHub</a>
+    <a href="paper.pdf" target="_blank">IEEE Paper</a>
+  </div>
+</footer>
+
+</body>
+</html>
